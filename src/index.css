@@ -155,3 +155,22 @@ a, button, input, textarea, select, [role="button"] {
 ::-webkit-scrollbar-thumb:hover {
   background: var(--color-forsythia);
 }
+
+/* Custom Interlocking Gear Rotation Animations */
+@keyframes spin-clockwise {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes spin-counter-clockwise {
+  0% { transform: rotate(360deg); }
+  100% { transform: rotate(0deg); }
+}
+
+.animate-spin-slow-cw {
+  animation: spin-clockwise 45s linear infinite;
+}
+
+.animate-spin-slow-ccw {
+  animation: spin-counter-clockwise 35s linear infinite;
+}

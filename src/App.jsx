@@ -16,10 +16,19 @@ import CustomCursor from './components/CustomCursor';
 export default function App() {
   return (
     <div className="relative min-h-screen bg-oceanic cursor-none">
-      <CustomCursor />
+      <div aria-hidden="true">
+        <CustomCursor />
+      </div>
       <Navbar />
 
-      <main>
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-100 focus:rounded-md focus:bg-arctic-powder focus:px-4 focus:py-2 focus:text-oceanic"
+      >
+        Skip to content
+      </a>
+
+      <main id="main-content" aria-label="Armory product platform overview">
         <Hero />
         <IntegrationSection />
         <StatsSection />

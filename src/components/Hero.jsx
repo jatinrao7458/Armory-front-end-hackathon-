@@ -10,18 +10,32 @@ export default function Hero() {
 
   return (
     <section id="hero" className="relative min-h-screen flex flex-col justify-end pb-20 pt-24 overflow-hidden" ref={ref}>
-      {/* Background image */}
-      <div className="absolute inset-0">
-        <img
-          src="/images/hero_bg.png"
-          alt=""
-          className="w-full h-full object-cover opacity-40"
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-bg-darker/80 via-oceanic/60 to-oceanic" />
+      {/* Interlocking Gears Background Animation */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none select-none opacity-20">
+        {/* Large Gold Gear */}
+        <div className="absolute top-[10%] -right-[150px] md:-right-[200px] w-[500px] h-[500px] md:w-[700px] md:h-[700px] mix-blend-screen animate-spin-slow-cw">
+          <img
+            src="/images/gear_gold.png"
+            alt=""
+            className="w-full h-full object-contain"
+          />
+        </div>
+
+        {/* Medium Teal Gear (Interlocking with Gold Gear) */}
+        <div className="absolute top-[40%] md:top-[35%] -right-[50px] md:-right-[80px] w-[350px] h-[350px] md:w-[500px] md:h-[500px] mix-blend-screen animate-spin-slow-ccw">
+          <img
+            src="/images/gear_teal.png"
+            alt=""
+            className="w-full h-full object-contain"
+          />
+        </div>
+
+        {/* Background gradient overlay to blend it in */}
+        <div className="absolute inset-0 bg-gradient-to-b from-bg-darker/60 via-oceanic/40 to-oceanic transition-colors duration-500" />
       </div>
 
       {/* Grid pattern overlay */}
-      <div className="absolute top-0 right-0 w-[60%] h-[70%] opacity-20">
+      <div className="absolute inset-0 opacity-25 pointer-events-none">
         <div className="absolute inset-0" style={{
           backgroundImage: 'linear-gradient(rgba(17,76,90,0.15) 1px, transparent 1px), linear-gradient(90deg, rgba(17,76,90,0.15) 1px, transparent 1px)',
           backgroundSize: '60px 60px'
