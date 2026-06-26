@@ -1,6 +1,6 @@
 import { motion, useInView, AnimatePresence, LayoutGroup } from 'framer-motion';
 import { useRef, useState, useEffect, useCallback, useMemo } from 'react';
-import { WavyLines } from './icons';
+import { WavyLines, BoltLogo, Cube16Solid, Cog8Tooth, ArrowTrendingUp, ChartPie, LinkIcon } from './icons';
 
 /*──────────────────────────────────────────────────────────────────────
  * BENTO-TO-ACCORDION WRAPPER WITH STATE PERSISTENCE
@@ -23,7 +23,7 @@ const FEATURES = [
     title: 'Neural Routing',
     subtitle: 'Intelligent task orchestration',
     description: 'Route complex tasks through specialized AI agents automatically. Our neural router analyzes intent, context, and capability to direct each request to the optimal processing pipeline.',
-    icon: '⚡',
+    Icon: BoltLogo,
     gradient: 'from-forsythia/15 to-deep-saffron/5',
     accentColor: 'text-forsythia',
     stats: { label: 'Routing Accuracy', value: '99.7%' },
@@ -34,7 +34,7 @@ const FEATURES = [
     title: 'Context Memory',
     subtitle: 'Persistent intelligence',
     description: 'Agents retain and recall contextual information across sessions. Long-term memory graphs ensure continuity and deeper understanding with every interaction.',
-    icon: '◆',
+    Icon: Cube16Solid,
     gradient: 'from-nocturnal/20 to-transparent',
     accentColor: 'text-mystic-mint',
     stats: { label: 'Recall Depth', value: '10K tokens' },
@@ -45,7 +45,7 @@ const FEATURES = [
     title: 'Secure Sandbox',
     subtitle: 'Isolated execution',
     description: 'Every agent runs inside a hardened sandbox with zero-trust networking. Your data never leaves your perimeter — guaranteed by design, not policy.',
-    icon: '⬡',
+    Icon: Cog8Tooth,
     gradient: 'from-nocturnal/15 to-transparent',
     accentColor: 'text-arctic-powder',
     stats: { label: 'Uptime SLA', value: '99.99%' },
@@ -56,7 +56,7 @@ const FEATURES = [
     title: 'Multi-Model Fusion',
     subtitle: 'Best-of-breed AI',
     description: 'Combine outputs from multiple foundation models — GPT, Claude, Gemini, Llama — and fuse them through ensemble scoring to produce superior results.',
-    icon: '✦',
+    Icon: ArrowTrendingUp,
     gradient: 'from-deep-saffron/10 to-forsythia/5',
     accentColor: 'text-deep-saffron',
     stats: { label: 'Models Supported', value: '14+' },
@@ -67,7 +67,7 @@ const FEATURES = [
     title: 'Real-Time Analytics',
     subtitle: 'Live intelligence feeds',
     description: 'Monitor agent performance, token usage, latency distributions, and error rates in real time. Custom alerting rules trigger before issues become incidents.',
-    icon: '◇',
+    Icon: ChartPie,
     gradient: 'from-nocturnal/20 to-nocturnal/5',
     accentColor: 'text-forsythia',
     stats: { label: 'Latency P99', value: '<50ms' },
@@ -78,7 +78,7 @@ const FEATURES = [
     title: 'Workflow Builder',
     subtitle: 'Visual agent pipelines',
     description: 'Drag-and-drop workflow editor for composing multi-step agent pipelines. Connect data sources, processing nodes, and output channels without writing code.',
-    icon: '⊞',
+    Icon: LinkIcon,
     gradient: 'from-forsythia/10 to-transparent',
     accentColor: 'text-forsythia',
     stats: { label: 'Avg Build Time', value: '< 5 min' },
@@ -121,9 +121,22 @@ function useViewport() {
  * ═══════════════════════════════════════════════════════════════════ */
 function BentoNode({ feature, index, activeIndex, setActiveIndex, isInView }) {
   const isActive = activeIndex === index;
+  const cardRef = useRef(null);
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const [isHovered, setIsHovered] = useState(false);
+
+  const handleMouseMove = (e) => {
+    if (!cardRef.current) return;
+    const rect = cardRef.current.getBoundingClientRect();
+    setMousePos({
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top,
+    });
+  };
 
   return (
     <motion.div
+      ref={cardRef}
       layout
       initial={{ opacity: 0, y: 30, scale: 0.95 }}
       animate={isInView ? { opacity: 1, y: 0, scale: 1 } : {}}
@@ -133,11 +146,13 @@ function BentoNode({ feature, index, activeIndex, setActiveIndex, isInView }) {
         ease: [0.22, 1, 0.36, 1],
         layout: { type: 'spring', stiffness: 200, damping: 25 },
       }}
-      onMouseEnter={() => setActiveIndex(index)}
-      onFocus={() => setActiveIndex(index)}
+      onMouseMove={handleMouseMove}
+      onMouseEnter={() => { setActiveIndex(index); setIsHovered(true); }}
+      onMouseLeave={() => setIsHovered(false)}
+      onFocus={() => { setActiveIndex(index); }}
       className={`
         relative rounded-xl overflow-hidden transition-all duration-300 p-6 md:p-8
-        border cursor-pointer group
+        border cursor-pointer group select-none
         ${isActive
           ? 'border-forsythia/40 bg-gradient-to-br ' + feature.gradient + ' shadow-[0_0_40px_rgba(255,200,1,0.06)]'
           : 'border-border/20 bg-bg-card/20 hover:border-border/40'
@@ -154,68 +169,83 @@ function BentoNode({ feature, index, activeIndex, setActiveIndex, isInView }) {
       data-cursor-text="Explore"
       id={`bento-${feature.id}`}
     >
-      {/* Icon + Title Row */}
-      <div className="flex items-start justify-between mb-4">
-        <div className="flex items-center gap-3">
-          <motion.span
-            animate={{ scale: isActive ? 1.15 : 1, rotate: isActive ? 8 : 0 }}
-            transition={{ type: 'spring', stiffness: 300, damping: 15 }}
-            className={`text-2xl ${feature.accentColor}`}
-          >
-            {feature.icon}
-          </motion.span>
-          <div>
-            <h3 className={`font-heading text-sm tracking-[0.15em] uppercase font-medium transition-colors duration-300
-              ${isActive ? 'text-arctic-powder' : 'text-arctic-powder/70'}`}>
-              {feature.title}
-            </h3>
-            <p className="font-heading text-[10px] tracking-[0.1em] text-text-muted mt-0.5">
-              {feature.subtitle}
-            </p>
-          </div>
-        </div>
-
-        {/* Active indicator */}
-        <motion.div
-          animate={{ scale: isActive ? 1 : 0, opacity: isActive ? 1 : 0 }}
-          transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-          className="w-2 h-2 rounded-full bg-forsythia flex-shrink-0 mt-1"
+      {/* Dynamic Hover Spotlight Overlay */}
+      {isHovered && (
+        <div
+          className="absolute inset-0 pointer-events-none transition-opacity duration-300 rounded-xl z-0"
+          style={{
+            background: `radial-gradient(280px circle at ${mousePos.x}px ${mousePos.y}px, rgba(255, 200, 1, 0.07), transparent 80%)`,
+          }}
         />
-      </div>
+      )}
 
-      {/* Description — expands on hover/active */}
-      <AnimatePresence>
-        {isActive && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-          >
-            <p className="text-sm text-arctic-powder/70 font-body leading-relaxed mb-5">
-              {feature.description}
-            </p>
-
-            {/* Stat chip */}
+      {/* Content wrapper with relative z-indexing to stack on top of the hover glow */}
+      <div className="relative z-10 flex flex-col h-full justify-between">
+        <div>
+          {/* Icon + Title Row */}
+          <div className="flex items-start justify-between mb-4">
             <div className="flex items-center gap-3">
-              <div className="inline-flex items-center gap-2 bg-bg-darker/40 border border-border/20 rounded-lg px-3 py-1.5">
-                <span className={`text-xs font-heading tracking-wide ${feature.accentColor}`}>
-                  {feature.stats.value}
-                </span>
-                <span className="text-[10px] font-heading text-text-muted tracking-[0.1em]">
-                  {feature.stats.label}
-                </span>
+              <motion.span
+                animate={{ scale: isActive ? 1.15 : 1, rotate: isActive ? 8 : 0 }}
+                transition={{ type: 'spring', stiffness: 300, damping: 15 }}
+                className={`${feature.accentColor}`}
+              >
+                <feature.Icon className="w-6 h-6" />
+              </motion.span>
+              <div>
+                <h3 className={`font-heading text-sm tracking-[0.15em] uppercase font-medium transition-colors duration-300
+                  ${isActive ? 'text-arctic-powder' : 'text-arctic-powder/70'}`}>
+                  {feature.title}
+                </h3>
+                <p className="font-heading text-[10px] tracking-[0.1em] text-text-muted mt-0.5">
+                  {feature.subtitle}
+                </p>
               </div>
             </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+
+            {/* Active indicator */}
+            <motion.div
+              animate={{ scale: isActive ? 1 : 0, opacity: isActive ? 1 : 0 }}
+              transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+              className="w-2 h-2 rounded-full bg-forsythia flex-shrink-0 mt-1"
+            />
+          </div>
+
+          {/* Description — expands on hover/active */}
+          <AnimatePresence>
+            {isActive && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                exit={{ opacity: 0, height: 0 }}
+                transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+              >
+                <p className="text-sm text-arctic-powder/70 font-body leading-relaxed mb-5">
+                  {feature.description}
+                </p>
+
+                {/* Stat chip */}
+                <div className="flex items-center gap-3">
+                  <div className="inline-flex items-center gap-2 bg-bg-darker/40 border border-border/20 rounded-lg px-3 py-1.5">
+                    <span className={`text-xs font-heading tracking-wide ${feature.accentColor}`}>
+                      {feature.stats.value}
+                    </span>
+                    <span className="text-[10px] font-heading text-text-muted tracking-[0.1em]">
+                      {feature.stats.label}
+                    </span>
+                  </div>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      </div>
 
       {/* Bottom gradient line */}
       <motion.div
         animate={{ scaleX: isActive ? 1 : 0 }}
         transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-        className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-forsythia/60 via-deep-saffron/40 to-transparent origin-left"
+        className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-forsythia/60 via-deep-saffron/40 to-transparent origin-left z-20"
       />
     </motion.div>
   );
@@ -250,9 +280,9 @@ function AccordionPanel({ feature, index, activeIndex, setActiveIndex, isInView 
           <motion.span
             animate={{ rotate: isOpen ? 12 : 0, scale: isOpen ? 1.1 : 1 }}
             transition={{ type: 'spring', stiffness: 300, damping: 15 }}
-            className={`text-xl ${isOpen ? feature.accentColor : 'text-text-muted'}`}
+            className={`${isOpen ? feature.accentColor : 'text-text-muted'}`}
           >
-            {feature.icon}
+            <feature.Icon className="w-5 h-5" />
           </motion.span>
           <div>
             <span className={`font-heading text-xs tracking-[0.15em] uppercase font-medium block transition-colors

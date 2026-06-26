@@ -1,12 +1,12 @@
 import { motion, useInView, AnimatePresence } from 'framer-motion';
 import { useRef, useState } from 'react';
-import { Search } from './icons';
+import { Search, ChartPie, ArrowTrendingUp, ArrowPath } from './icons';
 
 const tabs = [
   {
     id: 'discovery',
     label: 'Discovery',
-    icon: '⊛',
+    Icon: Search,
     title: 'Discover patterns in your enterprise data',
     description: 'Our AI agents scan, classify, and map your organizational data landscape. Identify hidden inefficiencies and untapped automation opportunities across every department.',
     visual: 'from-nocturnal/30 to-forsythia/5',
@@ -14,7 +14,7 @@ const tabs = [
   {
     id: 'analysis',
     label: 'Analysis',
-    icon: '◧',
+    Icon: ChartPie,
     title: 'Evaluate agent performance with surgical precision',
     description: 'Get real-time scoring on accuracy, safety, and contextual relevance. Quantify every interaction for total quality.',
     visual: 'from-forsythia/10 to-deep-saffron/5',
@@ -22,7 +22,7 @@ const tabs = [
   {
     id: 'training',
     label: 'Training',
-    icon: '✦',
+    Icon: ArrowTrendingUp,
     title: 'Fine-tune models on your proprietary datasets',
     description: 'Train domain-specific agents that understand your industry terminology, compliance requirements, and operational nuances.',
     visual: 'from-deep-saffron/10 to-nocturnal/20',
@@ -30,7 +30,7 @@ const tabs = [
   {
     id: 'deploy',
     label: 'Deploy',
-    icon: '⊡',
+    Icon: ArrowPath,
     title: 'Ship production-ready agents in minutes',
     description: 'One-click deployment to any cloud infrastructure. Auto-scaling, monitoring, and rollback capabilities built into every release pipeline.',
     visual: 'from-nocturnal/20 to-forsythia/10',
@@ -68,9 +68,10 @@ export default function ProductTabs() {
               className={`relative flex items-center gap-2 px-6 py-4 font-heading text-xs tracking-[0.2em] uppercase transition-colors duration-300
                 ${activeTab === i ? 'text-arctic-powder' : 'text-text-muted hover:text-arctic-powder/70'}`}
               id={`tab-${tab.id}`}
+              data-cursor="pointer"
             >
               <span className={`transition-colors duration-300 ${activeTab === i ? 'text-forsythia' : ''}`}>
-                {tab.icon}
+                <tab.Icon className="w-4 h-4" />
               </span>
               {tab.label}
               {activeTab === i && (

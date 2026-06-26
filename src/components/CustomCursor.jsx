@@ -31,6 +31,8 @@ function ParticleCanvas() {
   const rafRef = useRef(null);
   const particlesRef = useRef([]);
   const trailRef = useRef([]);     // breadcrumb trail dots
+  const clickParticlesRef = useRef([]); // click splash particles
+  const clickRipplesRef = useRef([]); // click expanding ripple rings
   const frameRef = useRef(0);
 
   useEffect(() => {
@@ -97,6 +99,41 @@ function ParticleCanvas() {
     };
     window.addEventListener('mousemove', onMouseMove);
 
+    // ── Click tracking (particles & ripples) ──
+    const onClick = (e) => {
+      const cx = e.clientX;
+      const cy = e.clientY;
+
+      // 1. Spawning 12-16 click splash particles
+      const count = 12 + Math.floor(Math.random() * 5);
+      for (let i = 0; i < count; i++) {
+        const angle = Math.random() * Math.PI * 2;
+        const speed = 2 + Math.random() * 4;
+        const color = PALETTE[Math.floor(Math.random() * PALETTE.length)];
+        clickParticlesRef.current.push({
+          x: cx,
+          y: cy,
+          vx: Math.cos(angle) * speed,
+          vy: Math.sin(angle) * speed,
+          size: 1.8 + Math.random() * 2.5,
+          color,
+          life: 1.0,
+          decay: 0.02 + Math.random() * 0.03,
+        });
+      }
+
+      // 2. Spawn an expanding ripple ring
+      clickRipplesRef.current.push({
+        x: cx,
+        y: cy,
+        radius: 4,
+        maxRadius: 40 + Math.random() * 20,
+        alpha: 0.8,
+        speed: 2.0 + Math.random() * 1.5,
+      });
+    };
+    window.addEventListener('click', onClick);
+
     // ── Animation loop ──
     const animate = () => {
       frameRef.current++;
@@ -132,6 +169,49 @@ function ParticleCanvas() {
         ctx.arc(tr.x, tr.y, trSize, 0, Math.PI * 2);
         ctx.fillStyle = `rgba(255, 200, 1, ${trAlpha})`;
         ctx.fill();
+      }
+
+      // ── Update & draw click splash particles ──
+      const cpts = clickParticlesRef.current;
+      for (let i = cpts.length - 1; i >= 0; i--) {
+        const cp = cpts[i];
+        cp.x += cp.vx;
+        cp.y += cp.vy;
+        cp.vx *= 0.95;
+        cp.vy *= 0.95;
+        cp.life -= cp.decay;
+        if (cp.life <= 0) {
+          cpts.splice(i, 1);
+          continue;
+        }
+
+        const { r, g, b } = cp.color;
+        ctx.beginPath();
+        ctx.arc(cp.x, cp.y, cp.size * cp.life, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${cp.life * 0.8})`;
+        ctx.fill();
+
+        ctx.beginPath();
+        ctx.arc(cp.x, cp.y, cp.size * cp.life * 2.2, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${cp.life * 0.12})`;
+        ctx.fill();
+      }
+
+      // ── Update & draw click ripple rings ──
+      const ripples = clickRipplesRef.current;
+      for (let i = ripples.length - 1; i >= 0; i--) {
+        const r = ripples[i];
+        r.radius += r.speed;
+        r.alpha -= 0.035;
+        if (r.alpha <= 0 || r.radius >= r.maxRadius) {
+          ripples.splice(i, 1);
+          continue;
+        }
+        ctx.beginPath();
+        ctx.arc(r.x, r.y, r.radius, 0, Math.PI * 2);
+        ctx.strokeStyle = `rgba(255, 200, 1, ${r.alpha})`;
+        ctx.lineWidth = 1.2;
+        ctx.stroke();
       }
 
       // ── Update & draw orbiting particles ──
@@ -226,6 +306,7 @@ function ParticleCanvas() {
     return () => {
       window.removeEventListener('resize', resize);
       window.removeEventListener('mousemove', onMouseMove);
+      window.removeEventListener('click', onClick);
       cancelAnimationFrame(rafRef.current);
     };
   }, []);

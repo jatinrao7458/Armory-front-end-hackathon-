@@ -183,6 +183,10 @@ function BillingToggle({ isAnnual, setIsAnnual }) {
 }
 
 function TierCard({ tier, currency, isAnnual, index, isInView }) {
+  const cardRef = useRef(null);
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const [isHovered, setIsHovered] = useState(false);
+
   const price = useMemo(
     () => computePrice(tier.baseRate, currency, isAnnual),
     [tier.baseRate, currency, isAnnual]
@@ -193,8 +197,21 @@ function TierCard({ tier, currency, isAnnual, index, isInView }) {
     [tier.baseRate, currency, isAnnual]
   );
 
+  const handleMouseMove = (e) => {
+    if (!cardRef.current) return;
+    const rect = cardRef.current.getBoundingClientRect();
+    setMousePos({
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top,
+    });
+  };
+
   return (
     <motion.div
+      ref={cardRef}
+      onMouseMove={handleMouseMove}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
       initial={{ opacity: 0, y: 40 }}
       animate={isInView ? { opacity: 1, y: 0 } : {}}
       transition={{
@@ -209,9 +226,21 @@ function TierCard({ tier, currency, isAnnual, index, isInView }) {
           : 'bg-bg-card/30 border border-border/30 hover:border-border/60'
         }`}
     >
+      {/* Dynamic Hover Spotlight Overlay */}
+      {isHovered && (
+        <div
+          className="absolute inset-0 pointer-events-none transition-opacity duration-300 rounded-xl"
+          style={{
+            background: `radial-gradient(350px circle at ${mousePos.x}px ${mousePos.y}px, ${
+              tier.highlighted ? 'rgba(255, 200, 1, 0.08)' : 'rgba(241, 246, 244, 0.04)'
+            }, transparent 80%)`,
+          }}
+        />
+      )}
+
       {/* Badge */}
       {tier.badge && (
-        <div className="absolute top-0 right-0">
+        <div className="absolute top-0 right-0 z-20">
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
@@ -223,7 +252,7 @@ function TierCard({ tier, currency, isAnnual, index, isInView }) {
         </div>
       )}
 
-      <div className="p-8 flex-1 flex flex-col">
+      <div className="p-8 flex-1 flex flex-col relative z-10">
         {/* Tier icon & name */}
         <div className="flex items-center gap-3 mb-2">
           <span className={`text-lg ${tier.highlighted ? 'text-forsythia' : 'text-text-muted'}`}>{tier.icon}</span>
@@ -253,6 +282,15 @@ function TierCard({ tier, currency, isAnnual, index, isInView }) {
               </span>
             )}
           </div>
+          {isAnnual && (
+            <motion.div
+              initial={{ opacity: 0, y: 5 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="text-[10px] font-heading text-forsythia/80 tracking-widest mt-2 uppercase font-medium"
+            >
+              {formatPrice(price * 12, currency)} Billed Yearly
+            </motion.div>
+          )}
         </div>
 
         {/* Divider */}
@@ -278,6 +316,7 @@ function TierCard({ tier, currency, isAnnual, index, isInView }) {
         <motion.button
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
+          data-cursor="pointer"
           className={`mt-8 w-full py-3.5 rounded-lg font-heading text-xs tracking-[0.15em] uppercase transition-all duration-300 flex items-center justify-center gap-2
             ${tier.highlighted
               ? 'bg-forsythia text-oceanic hover:bg-deep-saffron font-bold'
