@@ -61,6 +61,8 @@ export default function BlogSection() {
               <img
                 src={articles[0].image}
                 alt={articles[0].title}
+                loading="lazy"
+                decoding="async"
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-oceanic via-oceanic/30 to-transparent z-10" />
@@ -89,15 +91,17 @@ export default function BlogSection() {
                 animate={isInView ? { opacity: 1, y: 0 } : {}}
                 transition={{ delay: 0.3 + i * 0.1 }}
                 whileHover={{ y: -3 }}
-                className="blog-card group cursor-pointer flex gap-4"
+                className="blog-card group cursor-pointer flex flex-col sm:flex-row gap-4"
                 data-cursor="view"
                 data-cursor-text="Read"
               >
                 {/* Thumbnail */}
-                <div className="w-36 h-28 md:w-48 md:h-36 rounded-lg overflow-hidden border border-border/20 flex-shrink-0 relative">
+                <div className="w-full sm:w-36 h-48 sm:h-28 md:w-48 md:h-36 rounded-lg overflow-hidden border border-border/20 flex-shrink-0 relative">
                   <img
                     src={article.image}
                     alt={article.title}
+                    loading="lazy"
+                    decoding="async"
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                   />
                 </div>

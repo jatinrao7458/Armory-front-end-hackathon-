@@ -56,6 +56,8 @@ function CaseRow({ c, i, isInView }) {
             <img
               src={c.image}
               alt={c.title}
+              loading="lazy"
+              decoding="async"
               className="w-full h-full object-cover"
             />
             {/* Dark overlay for text readability */}
@@ -75,6 +77,8 @@ function CaseRow({ c, i, isInView }) {
             <motion.img
               src={c.image}
               alt={c.brand}
+              loading="lazy"
+              decoding="async"
               initial={{ opacity: 0, scale: 1.2 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.4 }}
@@ -123,7 +127,7 @@ export default function CaseStudies() {
   const isInView = useInView(ref, { once: true, margin: '-80px' });
 
   return (
-    <section id="cases" className="relative py-24 md:py-32 bg-arctic-powder" ref={ref}>
+    <section id="cases" className="relative py-20 md:py-32 bg-arctic-powder" ref={ref}>
       <div className="max-w-[1400px] mx-auto px-6 md:px-10">
         {/* Section label */}
         <motion.div
@@ -140,7 +144,7 @@ export default function CaseStudies() {
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ delay: 0.1, duration: 0.6 }}
-          className="text-4xl md:text-5xl lg:text-6xl font-body font-light text-oceanic leading-tight mb-4 max-w-xl"
+          className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-body font-light text-oceanic leading-tight mb-4 max-w-xl"
         >
           Proven neural solutions
         </motion.h2>

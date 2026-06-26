@@ -102,6 +102,7 @@
 /* Global Styles */
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
 }
 
 body {
@@ -111,16 +112,26 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
-  cursor: none;
   transition: background-color 0.4s ease, color 0.4s ease;
 }
 
-/* Ensure all elements inherit cursor:none */
-a, button, input, textarea, select, [role="button"] {
-  cursor: none;
+img {
+  max-width: 100%;
+  height: auto;
 }
 
-/* Restore default cursor on touch devices */
+/* Cursor is only hidden on devices that actually have a hover pointer. */
+@media (hover: hover) and (pointer: fine) {
+  body {
+    cursor: none;
+  }
+
+  a, button, input, textarea, select, [role="button"] {
+    cursor: none;
+  }
+}
+
+/* Restore the native cursor on touch/coarse-pointer devices. */
 @media (hover: none) and (pointer: coarse) {
   body, a, button, input, textarea, select, [role="button"] {
     cursor: auto;

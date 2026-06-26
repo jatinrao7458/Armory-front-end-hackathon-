@@ -9,23 +9,27 @@ export default function Hero() {
   const isInView = useInView(ref, { once: true, margin: '-100px' });
 
   return (
-    <section id="hero" className="relative min-h-screen flex flex-col justify-end pb-20 pt-24 overflow-hidden" ref={ref}>
+    <section id="hero" className="relative min-h-[100svh] md:min-h-screen flex flex-col justify-end pb-16 md:pb-20 pt-20 md:pt-24 overflow-hidden" ref={ref}>
       {/* Interlocking Gears Background Animation */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none select-none opacity-20">
         {/* Large Gold Gear */}
-        <div className="absolute top-[10%] -right-[150px] md:-right-[200px] w-[500px] h-[500px] md:w-[700px] md:h-[700px] mix-blend-screen animate-spin-slow-cw">
+        <div className="hidden md:block absolute top-[10%] -right-[200px] w-[500px] h-[500px] md:w-[700px] md:h-[700px] mix-blend-screen animate-spin-slow-cw">
           <img
             src="/images/gear_gold.png"
             alt=""
+            loading="eager"
+            decoding="async"
             className="w-full h-full object-contain"
           />
         </div>
 
         {/* Medium Teal Gear (Interlocking with Gold Gear) */}
-        <div className="absolute top-[40%] md:top-[35%] -right-[50px] md:-right-[80px] w-[350px] h-[350px] md:w-[500px] md:h-[500px] mix-blend-screen animate-spin-slow-ccw">
+        <div className="hidden md:block absolute top-[35%] -right-[80px] w-[350px] h-[350px] md:w-[500px] md:h-[500px] mix-blend-screen animate-spin-slow-ccw">
           <img
             src="/images/gear_teal.png"
             alt=""
+            loading="eager"
+            decoding="async"
             className="w-full h-full object-contain"
           />
         </div>
@@ -35,7 +39,7 @@ export default function Hero() {
       </div>
 
       {/* Grid pattern overlay */}
-      <div className="absolute inset-0 opacity-25 pointer-events-none">
+      <div className="absolute inset-0 opacity-20 md:opacity-25 pointer-events-none">
         <div className="absolute inset-0" style={{
           backgroundImage: 'linear-gradient(rgba(17,76,90,0.15) 1px, transparent 1px), linear-gradient(90deg, rgba(17,76,90,0.15) 1px, transparent 1px)',
           backgroundSize: '60px 60px'
@@ -46,16 +50,16 @@ export default function Hero() {
       <motion.div
         animate={{ scale: [1, 1.1, 1], opacity: [0.15, 0.25, 0.15] }}
         transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
-        className="absolute top-1/3 right-1/4 w-[500px] h-[500px] rounded-full bg-nocturnal/30 blur-[120px]"
+        className="hidden md:block absolute top-1/3 right-1/4 w-[500px] h-[500px] rounded-full bg-nocturnal/30 blur-[120px]"
       />
 
-      <div className="relative z-10 max-w-[1400px] mx-auto px-6 md:px-10 w-full">
+      <div className="relative z-10 max-w-[1400px] mx-auto px-4 sm:px-6 md:px-10 w-full">
         {/* Nav links - right side */}
         <motion.div
           initial={{ opacity: 0, x: 30 }}
           animate={isInView ? { opacity: 1, x: 0 } : {}}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="hidden lg:flex flex-col gap-4 absolute top-0 right-10 pt-24"
+            className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-body font-light leading-[0.95] tracking-tight text-arctic-powder mb-6"
         >
           {['AI Strategy', 'Custom Agents', 'Process Automation', 'Data Intelligence'].map((item, i) => (
             <motion.span
@@ -100,7 +104,7 @@ export default function Hero() {
             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
             className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-body font-light leading-[0.95] tracking-tight text-arctic-powder mb-6"
           >
-            Power your
+            Power your{" "}
             <br />
             future with <span className="text-forsythia">AI</span>
           </motion.h1>
@@ -122,7 +126,7 @@ export default function Hero() {
             transition={{ delay: 0.5, duration: 0.5 }}
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.98 }}
-            className="inline-flex items-center gap-3 bg-transparent border border-arctic-powder/30 hover:border-forsythia/60 text-arctic-powder px-6 py-3 rounded-lg font-heading text-sm tracking-wide transition-all duration-300 group"
+            className="inline-flex w-full sm:w-auto justify-center items-center gap-3 bg-transparent border border-arctic-powder/30 hover:border-forsythia/60 text-arctic-powder px-6 py-3 rounded-lg font-heading text-sm tracking-wide transition-all duration-300 group"
             id="hero-cta"
           >
             <span className="w-8 h-8 rounded border border-arctic-powder/20 flex items-center justify-center group-hover:border-forsythia/40 transition-colors">
@@ -138,7 +142,7 @@ export default function Hero() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.5 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2"
+        className="absolute bottom-6 md:bottom-8 left-1/2 -translate-x-1/2"
       >
         <motion.div
           animate={{ y: [0, 8, 0] }}

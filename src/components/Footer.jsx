@@ -36,7 +36,7 @@ export default function Footer() {
     <footer className="relative pt-20 pb-0 overflow-hidden" ref={ref}>
       <div className="max-w-[1400px] mx-auto px-6 md:px-10">
         {/* Top section */}
-        <div className="grid grid-cols-1 md:grid-cols-[200px_1fr_1fr_1fr] gap-12 mb-16">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-[200px_1fr_1fr_1fr] gap-10 md:gap-12 mb-16">
           {/* Logo */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -123,7 +123,7 @@ export default function Footer() {
         className="relative w-full overflow-hidden mt-8"
       >
         <h2
-          className="font-body font-black text-[12vw] md:text-[14vw] leading-none text-transparent tracking-tighter select-none pb-0"
+          className="font-body font-black text-[18vw] sm:text-[14vw] md:text-[12vw] leading-none text-transparent tracking-tighter select-none pb-0"
           style={{
             WebkitTextStroke: '2px rgba(241,246,244,0.08)',
           }}

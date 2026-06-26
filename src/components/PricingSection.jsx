@@ -124,13 +124,13 @@ function CurrencySwitcher({ currency, setCurrency }) {
   const currencies = ['USD', 'INR', 'EUR'];
 
   return (
-    <div className="relative inline-flex bg-bg-card/50 border border-border/30 rounded-lg p-1 isolate">
+    <div className="relative flex w-full sm:w-auto sm:inline-flex bg-bg-card/50 border border-border/30 rounded-lg p-1 isolate">
       {currencies.map((cur) => (
         <button
           key={cur}
           onClick={() => setCurrency(cur)}
-          className={`relative z-10 px-4 py-2 font-heading text-xs tracking-[0.15em] uppercase transition-colors duration-200 rounded-md
-            ${currency === cur ? 'text-oceanic' : 'text-text-muted hover:text-arctic-powder'}`}
+          className={`relative z-10 flex-1 sm:flex-none px-4 py-2 font-heading text-xs tracking-[0.15em] uppercase transition-colors duration-200 rounded-md
+            ${currency === cur ? 'text-oceanic font-bold' : 'text-text-muted hover:text-arctic-powder'}`}
           id={`currency-${cur.toLowerCase()}`}
         >
           <span className="mr-1">{CURRENCY_CONFIG[cur].symbol}</span>
@@ -344,7 +344,7 @@ export default function PricingSection() {
   return (
     <section id="pricing" className="relative py-24 md:py-32 overflow-hidden" ref={ref}>
       {/* Subtle background glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[600px] bg-nocturnal/10 rounded-full blur-[150px] pointer-events-none" />
+      <div className="hidden sm:block absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[600px] bg-nocturnal/10 rounded-full blur-[150px] pointer-events-none" />
 
       <div className="relative max-w-[1400px] mx-auto px-6 md:px-10">
         {/* Section label */}
@@ -362,7 +362,7 @@ export default function PricingSection() {
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ delay: 0.1, duration: 0.6 }}
-          className="text-4xl md:text-5xl lg:text-6xl font-body font-light text-arctic-powder leading-tight mb-4 max-w-lg"
+          className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-body font-light text-arctic-powder leading-tight mb-4 max-w-lg"
         >
           Scale your intelligence
         </motion.h2>
@@ -381,7 +381,7 @@ export default function PricingSection() {
           initial={{ opacity: 0, y: 10 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ delay: 0.2 }}
-          className="flex flex-col sm:flex-row items-start sm:items-center gap-6 mb-14"
+          className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-6 mb-14 w-full"
         >
           <BillingToggle isAnnual={isAnnual} setIsAnnual={setIsAnnual} />
           <CurrencySwitcher currency={currency} setCurrency={setCurrency} />

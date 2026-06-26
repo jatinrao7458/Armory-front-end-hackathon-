@@ -35,14 +35,14 @@ export default function Newsletter() {
           <input
             type="email"
             placeholder="jane@framer.com"
-            className="flex-1 bg-bg-card/50 border border-border/40 border-r-0 rounded-l-lg px-5 py-3.5 text-sm font-body text-arctic-powder placeholder:text-text-muted/40 outline-none focus:border-forsythia/40 transition-colors"
+            className="flex-1 bg-bg-card/50 border border-border/40 sm:border-r-0 rounded-lg sm:rounded-r-none px-5 py-3.5 text-sm font-body text-arctic-powder placeholder:text-text-muted/40 outline-none focus:border-forsythia/40 transition-colors"
             id="newsletter-email"
           />
           <motion.button
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             type="submit"
-            className="flex items-center gap-2 bg-bg-card border border-border/40 hover:border-forsythia/40 rounded-r-lg px-6 py-3.5 font-heading text-xs tracking-wide text-arctic-powder hover:text-forsythia transition-all"
+            className="flex items-center justify-center gap-2 bg-bg-card border border-border/40 hover:border-forsythia/40 rounded-lg sm:rounded-l-none mt-3 sm:mt-0 px-6 py-3.5 font-heading text-xs tracking-wide text-arctic-powder hover:text-forsythia transition-all"
             id="newsletter-submit"
           >
             <span className="w-5 h-5 rounded border border-arctic-powder/20 flex items-center justify-center text-[10px]">⊞</span>

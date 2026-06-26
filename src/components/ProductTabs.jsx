@@ -59,13 +59,13 @@ export default function ProductTabs() {
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ delay: 0.1 }}
-          className="flex flex-wrap border-b border-border/30 mb-0 relative"
+          className="grid grid-cols-2 md:flex md:flex-wrap border-b border-border/30 mb-0 relative"
         >
           {tabs.map((tab, i) => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(i)}
-              className={`relative flex items-center gap-2 px-6 py-4 font-heading text-xs tracking-[0.2em] uppercase transition-colors duration-300
+              className={`relative flex items-center justify-center gap-2 px-4 py-4 font-heading text-xs tracking-[0.2em] uppercase transition-colors duration-300 w-full md:w-auto
                 ${activeTab === i ? 'text-arctic-powder' : 'text-text-muted hover:text-arctic-powder/70'}`}
               id={`tab-${tab.id}`}
               data-cursor="pointer"
